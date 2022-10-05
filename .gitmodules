@@ -1,6 +1,3 @@
-[submodule "DFRobot_INA219_Driver"]
-	path = Wattmeter_INA219_Driver/libraries/DFRobot_INA219
-	url = https://github.com/DFRobot/DFRobot_INA219.git
 [submodule "Wattmeter_INA219_Driver/libraries/DFRobot_INA219"]
 	path = Wattmeter_INA219_Driver/libraries/DFRobot_INA219
 	url = https://github.com/DFRobot/DFRobot_INA219.git

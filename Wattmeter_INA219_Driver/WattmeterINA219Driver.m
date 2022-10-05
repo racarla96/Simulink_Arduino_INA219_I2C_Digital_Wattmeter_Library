@@ -15,19 +15,18 @@ classdef WattmeterINA219Driver < realtime.internal.SourceSampleTime & ...
     %#codegen
     %#ok<*EMCA>
     
-    properties
-        % Wire {0, 1}
-        wire_number = 0;
-        % Address 0x{40, 41, 44, 45}
-        address = 45;
+    properties     
+        id = 0; % Unique ID {0-7}
+        %wire_number = 0; % Wire {0, 1}
+        address = 45; % Address 0x{40, 41, 44, 45}
     end
     
     properties (Nontunable)
         % Public, non-tunable properties.
+        
     end
     
     properties (Access = private)
-        % Pre-computed constants.
     end
     
     methods
@@ -45,17 +44,18 @@ classdef WattmeterINA219Driver < realtime.internal.SourceSampleTime & ...
             else
                 % Call C-function implementing device initialization
                 coder.cinclude('WattmeterINA219Driver.h');
-                coder.ceval('wINA219Driver_Init', obj.wire_number, obj.address);
+                % coder.ceval('wINA219Driver_Init', int8(obj.id), int8(obj.wire_number), int8(obj.address));
+                coder.ceval('wINA219Driver_Init', int8(obj.id), int8(obj.address));
             end
         end
         
         function power_mW = stepImpl(obj)   %#ok<MANU>
-            power_mW = double(0);
+            power_mW = int32(0);
             if isempty(coder.target)
                 % Place simulation output code here
             else
                 % Call C-function implementing device output
-                power_mW = coder.ceval('wINA219Driver_Step');
+                coder.ceval('wINA219Driver_Step', int8(obj.id), coder.wref(power_mW));
             end
         end
         
@@ -93,7 +93,7 @@ classdef WattmeterINA219Driver < realtime.internal.SourceSampleTime & ...
         end
         
         function varargout = getOutputDataTypeImpl(~)
-            varargout{1} = 'double';
+            varargout{1} = 'int32';
         end
         
         function icon = getIconImpl(~)
@@ -136,7 +136,7 @@ classdef WattmeterINA219Driver < realtime.internal.SourceSampleTime & ...
 
                 % Include source files
                 addSourceFiles(buildInfo,'WattmeterINA219Driver.cpp',srcDir);
-                addSourceFiles(buildInfo,'DFRobot_INA2192.cpp',libDirA);
+                addSourceFiles(buildInfo,'DFRobot_INA219.cpp',libDirA);
     
                 boardInfo = arduino.supportpkg.getBoardInfo;
         
