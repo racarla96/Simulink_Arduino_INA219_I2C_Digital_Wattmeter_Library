@@ -17,7 +17,7 @@ classdef WattmeterINA219Driver < realtime.internal.SourceSampleTime & ...
     
     properties     
         id = 0; % Unique ID {0-7}
-        %wire_number = 0; % Wire {0, 1}
+        wire_number = 0; % Wire {0, 1}
         address = 45; % Address 0x{40, 41, 44, 45}
     end
     
