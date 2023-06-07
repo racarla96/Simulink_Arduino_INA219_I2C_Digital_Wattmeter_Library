@@ -14,7 +14,7 @@ extern "C" {
 
         void wINA219Driver_Init(int8_t, int8_t);
         //void wINA219Driver_Init(int8_t, int8_t, int8_t);
-        void wINA219Driver_Step(int8_t, int32_t*);
+        void wINA219Driver_Step(int8_t, int32_t*, int32_t*);
         void wINA219Driver_Terminate(void);
 #endif
 #ifdef __cplusplus

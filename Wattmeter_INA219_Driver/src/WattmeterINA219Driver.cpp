@@ -78,17 +78,19 @@ extern "C" void wINA219Driver_Init(int8_t id, int8_t slave_address)
     //Linear calibration
     //ina219->linearCalibrate(/*The measured current before calibration*/ina219Reading_mA, /*The current measured by other current testers*/extMeterReading_mA);
 } 
-extern "C" void wINA219Driver_Step(int8_t id, int32_t* power)
+extern "C" void wINA219Driver_Step(int8_t id, int32_t* mA, int32_t* mV)
 { 
     /* If sensor is initialized properly, then read the sensor else return 0 */
     if(init_f[id])              
     { 
         // Obtain sensor power data
-        *power = (int32_t) ina219[id]->getPower_mW();
+        *mA = (int32_t) ina219[id]->getCurrent_mA();
+        *mV = (int32_t) (ina219[id]->getBusVoltage_V() * 1000.0f);
     } 
     else
     { 
-        *power = -1; 
+        *mA = -1; 
+        *mV = -1;
     } 
 } 
 extern "C" void wINA219Driver_Terminate() 

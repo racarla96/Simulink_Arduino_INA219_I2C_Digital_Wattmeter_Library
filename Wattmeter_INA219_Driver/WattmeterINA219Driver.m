@@ -49,13 +49,14 @@ classdef WattmeterINA219Driver < realtime.internal.SourceSampleTime & ...
             end
         end
         
-        function power_mW = stepImpl(obj)   %#ok<MANU>
-            power_mW = int32(0);
+        function [current_mA, voltage_mV]  = stepImpl(obj)   %#ok<MANU>
+            current_mA = int32(0);
+            voltage_mV = int32(0);
             if isempty(coder.target)
                 % Place simulation output code here
             else
                 % Call C-function implementing device output
-                coder.ceval('wINA219Driver_Step', int8(obj.id), coder.wref(power_mW));
+                coder.ceval('wINA219Driver_Step', int8(obj.id), coder.wref(current_mA), coder.wref(voltage_mV));
             end
         end
         
@@ -76,24 +77,28 @@ classdef WattmeterINA219Driver < realtime.internal.SourceSampleTime & ...
         end
         
         function num = getNumOutputsImpl(~)
-            num = 1;
+            num = 2;
         end
         
         function varargout = isOutputFixedSizeImpl(~,~)
             varargout{1} = true;
+            varargout{2} = true;
         end
         
         
         function varargout = isOutputComplexImpl(~)
             varargout{1} = false;
+            varargout{2} = false;
         end
         
         function varargout = getOutputSizeImpl(~)
             varargout{1} = [1,1];
+            varargout{2} = [1,1];
         end
         
         function varargout = getOutputDataTypeImpl(~)
             varargout{1} = 'int32';
+            varargout{2} = 'int32';
         end
         
         function icon = getIconImpl(~)
